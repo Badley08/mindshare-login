@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentification – MindShare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+      background-color: var(--card-color);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .btn-primary {
+      background-color: var(--accent-color);
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      opacity: 0.9;
+    }
+
+    .btn-outline {
+      border: 2px solid var(--accent-color);
+      color: var(--accent-color);
+      background: transparent;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--accent-color);
+      color: white;
+    }
+
+    .toggle-link {
+      color: var(--accent-color);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .toggle-link:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="theme-light flex items-center justify-center min-h-screen">
+  <div class="card p-8 w-full max-w-md text-center fade-in">
+    <div class="text-3xl font-bold mb-6 flex justify-center items-center gap-2">
+      <i class="fas fa-brain text-[var(--accent-color)]"></i> MindShare
+    </div>
+
+    <!-- Connexion -->
+    <div id="login-form" class="fade-in">
+      <h2 class="text-2xl font-semibold mb-2">Heureux de te revoir </h2>
+      <p class="text-gray-500 mb-6">Connecte-toi pour partager tes idées</p>
+
+      <form class="space-y-4 text-left">
+        <div>
+          <label for="login-email" class="font-medium">E-mail</label>
+          <input type="email" id="login-email" required
+            class="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[var(--accent-color)] bg-[var(--card-color)] text-[var(--text-color)]">
+        </div>
+        <div>
+          <label for="login-password" class="font-medium">Mot de passe</label>
+          <input type="password" id="login-password" required
+            class="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[var(--accent-color)] bg-[var(--card-color)] text-[var(--text-color)]">
+        </div>
+        <button type="submit" class="btn-primary w-full py-3 mt-4">Se connecter</button>
+      </form>
+
+      <div class="mt-6">
+        <button class="btn-outline flex items-center justify-center gap-2 w-full py-3">
+          <i class="fab fa-google"></i> Connexion avec Google
+        </button>
+      </div>
+
+      <p class="mt-6 text-sm text-gray-500">
+        Pas encore inscrit ?
+        <span id="show-signup" class="toggle-link">Créer un compte</span>
+      </p>
+    </div>
+
+    <!-- Inscription -->
+    <div id="signup-form" class="hidden fade-in">
+      <h2 class="text-2xl font-semibold mb-2">Créer un compte </h2>
+      <p class="text-gray-500 mb-6">Rejoins la communauté MindShare</p>
+
+      <form class="space-y-4 text-left">
+        <div>
+          <label for="signup-username" class="font-medium">Nom d’utilisateur</label>
+          <input type="text" id="signup-username" required
+            class="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[var(--accent-color)] bg-[var(--card-color)] text-[var(--text-color)]">
+        </div>
+        <div>
+          <label for="signup-email" class="font-medium">E-mail</label>
+          <input type="email" id="signup-email" required
+            class="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[var(--accent-color)] bg-[var(--card-color)] text-[var(--text-color)]">
+        </div>
+        <div>
+          <label for="signup-password" class="font-medium">Mot de passe</label>
+          <input type="password" id="signup-password" required
+            class="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[var(--accent-color)] bg-[var(--card-color)] text-[var(--text-color)]">
+        </div>
+        <button type="submit" class="btn-primary w-full py-3 mt-4">S’inscrire</button>
+      </form>
+
+      <p class="mt-6 text-sm text-gray-500">
+        Déjà un compte ?
+        <span id="show-login" class="toggle-link">Se connecter</span>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Applique le thème actuel
+    document.body.className = `theme-${localStorage.getItem('mindshare-theme') || 'light'}`;
+
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const showSignup = document.getElementById('show-signup');
+    const showLogin = document.getElementById('show-login');
+
+    showSignup.addEventListener('click', () => {
+      loginForm.classList.add('hidden');
+      signupForm.classList.remove('hidden');
+    });
+
+    showLogin.addEventListener('click', () => {
+      signupForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
